@@ -1,31 +1,39 @@
+'use client'
+
 import Link from "next/link"
+import { useEffect, useState } from "react"
+
+// Define interface for the expected data structure
+interface Meetup {
+    _id: string;
+    name: string;
+    image: string;
+    
+}
 
 export default function HomePage() {
-    const DUMMY_MEETUPS = [
-        {
-            name: "casablanca",
-            id: 1,
-            image:"https://images.unsplash.com/photo-1444723121867-7a241cacace9?auto=format&fit=crop&q=80&w=1770&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }, {
-            name: "amsterdam",
-            id: 2,
-            image:"https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&q=80&w=1912&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }
-    ]
+    const [arr, setArr] = useState<Meetup[]>([]); // Specify the type as an array of Meetup objects
 
-    return(<div>
-        {
-            DUMMY_MEETUPS.map((e,i) => {
-                return (
-                    <Link href={`/${e.id}`}>
-                    <div key={i} className="meetbox">
-                        <img src={e.image} className="image" />
-                        <div>{e.id}</div>
-                    <div>{e.name}</div>
-                    </div>
-                    </Link>
-                )
+    useEffect(() => {
+        fetch("https://crudcrud.com/api/6b11232e2ddb4482a8171b2c8b18cd12/allmeetups")
+            .then(res => res.json())
+            .then((res: Meetup[]) => { // Annotate the type of 'res'
+                setArr(res);
             })
-        }
-    </div>)
+            .catch(e => console.log(e));
+    }, []);
+
+    return (
+        <div>
+            {arr.map((e, i) => (
+                <div key={i} className="meetbox">
+                    <img src={e.image} className="image" />
+                    <div>{e.name}</div>
+                    <Link href={`/${e._id}`}>
+                        <div className="detail-btn">Show Details</div>
+                    </Link>
+                </div>
+            ))}
+        </div>
+    );
 }
