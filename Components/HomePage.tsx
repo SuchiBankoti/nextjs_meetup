@@ -5,7 +5,6 @@ import getAllMeetup from "@/lib/getAllMeetup";
 export default async function HomePage() {
     const data: Promise<Meetups[]> = getAllMeetup()
     const arr = await data
-    console.log('arr',arr)
     if (!arr) {
         return <div>Loading...</div>
     }
