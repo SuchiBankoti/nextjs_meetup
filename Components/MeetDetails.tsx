@@ -1,24 +1,10 @@
-'use client'
+import getMeetDetails from "@/lib/getMeetDetail";
 
-import { useEffect, useState } from "react";
 
-interface Meetup {
-    name: string;
-    image: string;
+export default async function MeetDetails({ id }: { id: string }) {
+      const data:Promise<Meetups>=getMeetDetails(id)
+      const meet = await data
     
-}
-
-export default function MeetDetails({ id }: { id: string }) {
-    const [meet, setMeet] = useState<Meetup | null>(null); 
-
-    useEffect(() => {
-        fetch(`https://crudcrud.com/api/6b11232e2ddb4482a8171b2c8b18cd12/allmeetups/${id}`)
-            .then(res => res.json())
-            .then((res: Meetup) => { 
-                setMeet(res);
-            })
-            .catch(e => console.log(e));
-    }, [id]); 
 
     return (
         <div>

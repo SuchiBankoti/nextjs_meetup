@@ -1,5 +1,6 @@
 'use client'
 
+import addMeet from "@/lib/addMeet";
 import { useState,ChangeEvent } from "react";
 
 export default function MeetForm() {
@@ -12,15 +13,7 @@ export default function MeetForm() {
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData(prev=>({...prev,[e.target.name]:e.target.value}))
     }
-    function add() {
-        fetch("https://crudcrud.com/api/6b11232e2ddb4482a8171b2c8b18cd12/allmeetups", {
-            method: "POST",
-            headers: {
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(formData)
-        })
-    }
+    
     return (
         <div className="main">
             <form className="form">
@@ -44,7 +37,7 @@ export default function MeetForm() {
                 
 
             </form>
-            <button onClick={()=>add()}>Add</button>
+            <button onClick={()=>addMeet(formData)}>Add</button>
         </div>
     );
 }

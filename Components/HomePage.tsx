@@ -1,31 +1,17 @@
-'use client'
-
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import getAllMeetup from "@/lib/getAllMeetup";
 
-// Define interface for the expected data structure
-interface Meetup {
-    _id: string;
-    name: string;
-    image: string;
-    
-}
 
-export default function HomePage() {
-    const [arr, setArr] = useState<Meetup[]>([]); // Specify the type as an array of Meetup objects
-
-    useEffect(() => {
-        fetch("https://crudcrud.com/api/6b11232e2ddb4482a8171b2c8b18cd12/allmeetups")
-            .then(res => res.json())
-            .then((res: Meetup[]) => { // Annotate the type of 'res'
-                setArr(res);
-            })
-            .catch(e => console.log(e));
-    }, []);
-
+export default async function HomePage() {
+    const data: Promise<Meetups[]> = getAllMeetup()
+    const arr = await data
+    console.log('arr',arr)
+    if (!arr) {
+        return <div>Loading...</div>
+    }
     return (
         <div>
-            {arr.map((e, i) => (
+            {arr.map((e:Meetups, i:number) => (
                 <div key={i} className="meetbox">
                     <img src={e.image} className="image" />
                     <div>{e.name}</div>
@@ -37,3 +23,5 @@ export default function HomePage() {
         </div>
     );
 }
+
+
